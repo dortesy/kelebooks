@@ -149,3 +149,4 @@ SESSION_SAVE_EVERY_REQUEST=True
 #     for post in Post.objects.all():
 #         f.write('https://oboi-download.ru/'+post.slug+'/|')
 #     f.write('}')
+WSGI_APPLICATION = 'thisbook.wsgi.application'
