@@ -2,12 +2,12 @@
 {% load static %}
 {% block title %}
 {% if content.books %}
-Все книги  {% if content.selected.category %}из категории "{{content.selected.category}}" {% endif %} {% if content.selected.author %}от автора "{{content.selected.author}}" {% endif %}  {% if content.selected.year %}  {{content.selected.year}} года {% endif %}- thisbook.com
+Все книги  {% if content.selected.category %}из категории "{{content.selected.category}}" {% endif %} {% if content.selected.author %}от автора "{{content.selected.author}}" {% endif %}  {% if content.selected.year %}  {{content.selected.year}} года {% endif %}- kelebooks.com
 {% else %}
 По вашиим критериям ничего не найдено
 {% endif %}
 {% endblock %}
-{% block description %}Цитаты по поисковому запросу - {{content.query}} - thisbook.com{% endblock %}
+{% block description %}Цитаты по поисковому запросу - {{content.query}} - kelebooks.com{% endblock %}
 {% block keywords %}цитаты из книг, Цитаты по поисковому запросу - {{content.query}}{% endblock %}
 
 {% block canonical %}{{request.build_absolute_uri }}{% endblock %}

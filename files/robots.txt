@@ -1,5 +1,5 @@
-Sitemap: https://thisbook.com/sitemap-books.xml
-Sitemap: https://thisbook.com/sitemap-authors.xml
+Sitemap: https://kelebooks.com/sitemap-books.xml
+Sitemap: https://kelebooks.com/sitemap-authors.xml
 User-agent: *
 Disallow: /contact/
 Disallow: /privacy-policy/

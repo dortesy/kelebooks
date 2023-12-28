@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{% block title %}Читать книги онлайн бесплатно на мобильном телефоне и компьютере{% if page_obj.number > 1 %} - Страница {{page_obj.number}}{% endif %}{% endblock %}</title>
-    <meta name="description" property="og:description" content="{% block description %}thisbook.com - вебсайт на котором у вас есть возможность читать книги онлайн бесплатно. На нашем сайте десятки тысяч книг самых разных жанров{% endblock %}">
+    <meta name="description" property="og:description" content="{% block description %}kelebooks.com - вебсайт на котором у вас есть возможность читать книги онлайн бесплатно. На нашем сайте десятки тысяч книг самых разных жанров{% endblock %}">
     <meta name="keywords" content="{% block keywords %}Книги, читать онлайн, библиотека, русская литература, зарубежная литература{% endblock %}">
     <link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
     {% if request.path == "/" %}
@@ -15,7 +15,7 @@
     {% endif %}
     <link rel="stylesheet" href="{% static '/css/app.min.css' %}">
     <link rel="shortcut icon" href="{% static 'favicon.ico' %}"/>
-    <link rel="canonical" href="{% block canonical %}https://thisbook.com{% endblock %}" />
+    <link rel="canonical" href="{% block canonical %}https://kelebooks.com{% endblock %}" />
     <meta property="og:url" content="{% block og_url %}{{request.build_absolute_uri }}{% endblock %}" />
     <meta property="og:title" content="{% block og_title %}Читать книги онлайн бесплатно{% endblock %}" />
     <meta property="og:image" content="{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{% static '/img/logo.svg' %}{% endblock %}" />
