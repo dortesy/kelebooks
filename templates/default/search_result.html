@@ -1,0 +1,227 @@
+{% extends "default/base.html" %}
+{% load static %}
+{% block title %}
+{% if content.books %}
+Все книги  {% if content.selected.category %}из категории "{{content.selected.category}}" {% endif %} {% if content.selected.author %}от автора "{{content.selected.author}}" {% endif %}  {% if content.selected.year %}  {{content.selected.year}} года {% endif %}- thisbook.com
+{% else %}
+По вашиим критериям ничего не найдено
+{% endif %}
+{% endblock %}
+{% block description %}Цитаты по поисковому запросу - {{content.query}} - thisbook.com{% endblock %}
+{% block keywords %}цитаты из книг, Цитаты по поисковому запросу - {{content.query}}{% endblock %}
+
+{% block canonical %}{{request.build_absolute_uri }}{% endblock %}
+
+{% block og_url %}{{request.build_absolute_uri }}{% endblock %}
+{% block og_title %}{{content.query}} {% endblock %}
+{% block og_image %}{{ request.scheme }}://{{ request.get_host }}/{{ content.books.0.image }}{% endblock %}
+{% block og_image_alt %}{{query.title}}{% endblock %}
+
+{% block no_index %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+
+{% block main_class %}post{% endblock %}
+
+
+
+{% block post %}
+
+
+
+{% load static %}
+<section class="latest-book-wrapper">
+
+	<div class="container">
+		<div class="latest-book-header">
+			
+                {% if content.books %}
+                <h1>Все книги  {% if content.selected.category %}из категории "{{content.selected.category}}" {% endif %} {% if content.selected.author %}от автора "{{content.selected.author}}" {% endif %}  {% if content.selected.year %}  {{content.selected.year}} года {% endif %}</h1>
+                {% else %}
+                <h1>По вашиим критериям ничего не найдено</h1>
+                <h5>Пожалуйста попробуйте использовать другие поисковые критерии</h5>
+                {% endif %}
+            
+			<div class="latest-book-subtitle">Воспользовавшись формой вы сможете найти книги по категориям, любимому автору или году выпуска</div>
+			<form action="#" class="latest-book-form">
+				<select name="category" id="select-category"  placeholder="Выберите категорию">
+					<option default value="">Выберите категорию</option>
+					{% for category in categories %}
+						<option value="{{category.id}}"
+                        {% if request.GET.category == category.id|slugify %}
+                        selected
+                        {% endif %}
+                        >{{category.title}}</option>
+					{% endfor %}
+				</select>
+
+
+				<select name="year" id="select-year" placeholder="Выберите год">
+					<option default value="">Выберите год</option>
+					{% for year in content.years %}
+						<option value="{{year.id}}" {% if request.GET.year == year.id|slugify %}
+                        selected
+                        {% endif %}>{{year.date}}</option>
+					{% endfor %}
+				</select>
+				
+
+				<button type="submit" class="submit-button">Поиск</button>
+			</form>
+
+		</div>
+
+        {% if content.books %}
+		<div class="latest-books">
+			{% for book in content.books %}
+			<div class="latest-book" itemscope itemtype="https://schema.org/Book">
+
+				<div class="latest-book-bg"></div>
+				<a href="{% url 'book' book.slug %}" class="latest-book-link" itemprop="contentUrl"></a>
+				
+					<div class="latest-book-image">
+						{% if book.image %}
+					
+						<img src="{% static 'img/placeholder.jpg' %}" itemprop="image" data-src="{{ book.image }}" alt="{{ book.title }}" class="lazy" itemprop="image">
+			
+						{% else %}
+			
+						<img src="{% static 'img/placeholder.jpg' %}" itemprop="image" data-src="{% static 'img/thumbnail-2.jpg' %}" alt="{{ book.title }}" class="lazy" itemprop="image">
+			
+						{% endif %}
+					</div>
+			
+
+				<div class="latest-book-description">
+					<a class="latest-book-author" href="{% url 'author' book.author.slug %}" itemprop="author">{{ book.author.first_name }} {{ book.author.last_name }}</a>
+					<h3 class="latest-book-book" itemprop="name">{{ book.title }}</h3>
+					<div class="latest-book-meta">
+						<div class="latest-book-rating"><img src="{% static '/img/star.svg' %}" alt="Rating"> <span>5.0</span></div>
+						<div class="latest-book-views"><img src="{% static '/img/eye.svg' %}" alt="Rating"> <span>{{book.views}}</span></div>
+						<div class="latest-book-year" itemprop="datePublished"><img src="{% static '/img/year.svg' %}" alt="Rating"> <span>
+							
+							{% for year in book.year.all %}
+								{{year.date}} {% if not forloop.last %} - {% endif %}
+							{% endfor %}
+						
+						</span></div>
+					</div>
+					<div class="latest-book-description-bg"></div>
+				</div>
+			
+	
+			</div>
+			
+			{% endfor%}
+		</div>
+        {% else %}
+
+        <section class="error-404">
+            <div class="error-404-title">Ничего не найдено - <a href="/">Вернуться на главную</a></div>
+        </section>
+        {% endif %}
+
+
+	<!--Pagination-->
+	<nav aria-label="pagination-nav" itemscope itemtype="http://schema.org/SiteNavigationElement/Pagination">
+		<ul class="pagination">
+		{% if content.books.has_previous %}
+		<li class="page-item">
+			<a class="page-link" href="{{request.get_full_path}}&page={{ content.books.previous_page_number }}" rel="prev">Назад</a>
+		</li>
+		{% else %}
+		<li class="page-item disabled">
+			<a class="page-link" href="#" tabindex="-1" aria-disabled="True">Назад</a>
+		</li>
+		{% endif %}
+
+		{% if content.books.number > 5 %}
+		<li class="page-item">
+			<a href="{{request.get_full_path}}&page=1" itemprop="relatedLink/pagination">1</a>
+		</li>	
+		{% endif %}
+
+		{% if content.books.number|add:'-4' > 1 %}
+			<li class="page-item"><a class="page-link" href="{{request.get_full_path}}&page={{ content.books.number|add:'-5' }}" itemprop="relatedLink/pagination">&hellip;</a></li>
+		{% endif %}
+
+		{% for i in content.books.paginator.page_range %}
+			{% if content.books.number == i %}
+				<li class="page-item active" aria-current="page">
+				<span class="page-link">
+				{{ i }}
+			</span>
+			</li>
+			{% elif i > content.books.number|add:'-5' and i < content.books.number|add:'5' %}
+				<li class="page-item"><a class="page-link" href="{{request.get_full_path}}&page={{ i }}" itemprop="relatedLink/pagination">{{ i }}</a></li>
+			{% endif %}
+		{% endfor %}
+
+		{% if content.books.paginator.num_pages > content.books.number|add:'4' %}
+		<li class="page-item"><a class="page-link" href="{{request.get_full_path}}&page={{ content.books.number|add:'5' }}" itemprop="relatedLink/pagination">&hellip;</a></li>
+		{% endif %}
+
+					
+		{% if content.books.number < content.books.paginator.num_pages|add:'-2' %}
+		<li class="page-item">
+			<a href="{{request.get_full_path}}&page={{ content.books.paginator.num_pages }}" itemprop="relatedLink/pagination">{{ content.books.paginator.num_pages }}</a>
+		</li>	
+		{% endif %}
+
+		{% if content.books.has_next %}
+			<li class="page-item">
+			<a class="page-link" href="{{request.get_full_path}}&page={{ content.books.next_page_number }}" rel="next">Далее</a>
+		</li>
+
+	
+		{% else %}
+			<li class="page-item disabled">
+			<a class="page-link" href="#" tabindex="-1" aria-disabled="True">Далее</a>
+		</li>
+		{% endif %}
+	</ul>
+	</nav>
+	<!--end of Pagination-->
+		
+
+	</div>
+
+</section>
+
+<script src="{% static '/js/vibrant.min.js' %}"></script>
+<script>
+ 	function randomIntFromInterval(min, max) { // min and max included 
+        return Math.floor(Math.random() * (max - min + 1) + min)
+        }
+
+	let latest_books = document.querySelectorAll('.latest-book')
+	
+
+	latest_books.forEach(e => {
+		var gradient_colors = ''
+		Vibrant.from(e.querySelector('img').dataset.src).getPalette().then((palette) => {
+
+	
+		for(let color in palette) {
+			let r_number = randomIntFromInterval(0, 360)
+            let r_number2 = randomIntFromInterval(60, 110)
+
+
+			gradient_colors += "linear-gradient("+r_number+"deg, "+palette[color].getHex()+", rgba(0,0,0, 5) "+r_number2+".71%), "
+
+		}
+
+		let gradient_style = gradient_colors.substring(0, gradient_colors.length - 2);
+		e.querySelector('.latest-book-bg').style.backgroundImage  = gradient_style;
+		});
+
+	})
+		
+	
+
+
+   
+
+
+
+</script>
+
+{% endblock %}

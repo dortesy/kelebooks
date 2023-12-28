@@ -1,0 +1,86 @@
+{% load static %}
+
+{% if not user.is_authenticated %}
+    <div class="modal-wrapper modal-login">
+
+        <div class="modal-block modal-block-registration">
+
+            <div class="close-button"> 
+                <img src="{% static 'img/close.svg' %}" alt="Закрыть">
+            </div>
+
+            <div class="modal-block-title">Авторазация</div>
+
+            <form action="{% url 'registration' %}" method="POST" class="registration-form">
+                {% csrf_token %}
+                <div class="reg-input email-input">
+                    <img src="{% static 'img/email.svg' %}" alt="Ваш email">
+                    <input type="email" name="email" placeholder="Email" id="reg-email" required>
+                </div>
+                
+                <div class="reg-input password-input">
+                    <img src="{% static 'img/password.svg' %}" alt="Пароль">
+                    <input type="password" name="password" placeholder="Пароль" id="reg-password" required minlength="6">
+                </div>
+                
+                <div class="reg-input">
+                    <div class="g-recaptcha" data-sitekey="6LdeRaseAAAAAPaIY-QbWj0Y5DC1cH7ff17Q-nz6" data-callback="enableBtn"></div>
+                </div>
+                
+                <div class="reg-input">
+                    <input type="submit" value="Вход" class="registration-submit" disabled>
+                </div>
+
+            </form>
+
+            <div class="registration-link">
+                <span>Зарегистрироваться</span>
+            </div>
+
+            <div class="auth-link">
+                <span>Войти</span>
+            </div>
+            
+            <div class="registration-message-error">
+
+            </div>
+
+            <div class="modal-loading modal-login-loading">
+                <svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0"  viewBox="0 0 128 128" xml:space="preserve"><rect x="0" y="0" width="100%" height="100%" fill="transparent" /><g><path d="M64 127.75A63.76 63.76 0 0 1 52.8 1.23v14.23a49.8 49.8 0 1 0 22.4 0V1.23A63.76 63.76 0 0 1 64 127.75z" fill="#ffffff"/><animateTransform attributeName="transform" type="rotate" from="0 64 64" to="360 64 64" dur="1080ms" repeatCount="indefinite"></animateTransform></g></svg>
+            </div>
+        </div>
+
+        <div class="modal-block modal-block-registration-success">
+            <div class="modal-text success">Вы успешно зарегистрировались!</div>
+
+            <div class="modal-text information">
+                Сейчас будет прозведен автоматический вход и переадресация...
+            </div>
+        </div>
+
+    </div>
+
+{% else %}
+
+<div class="modal-wrapper modal-profile">
+    
+    <div class="modal-block modal-block-profile">
+        <div class="close-button"> 
+            <img src="{% static 'img/close.svg' %}" alt="Close">
+        </div>
+   
+        <h2 class="modal-profile-title">
+            Личный профиль
+        </h2>
+        <ul class="profile-menu-list">
+            <li><a href="{% url 'my_books' %}"><span><img src="{% static 'img/mybooks.svg' %}" alt="Мои книги"> Ваши книги</span>   <span><img src="{% static 'img/arrow.svg' %}" class="arrow"></span></a></li>
+
+            <li><a href="{% url 'change_password' %}"><span><img src="{% static 'img/password-change.svg' %}" alt="Мои книги">Сменить пароль </span>   <span><img src="{% static 'img/arrow.svg' %}" class="arrow"></span></a></li>
+
+            <li><a href="{% url 'logout' %}"><span><img src="{% static 'img/sign-out.svg' %}" alt="Мои книги">Выйти </span>   <span><img src="{% static 'img/arrow.svg' %}" class="arrow"></span></a></li>
+        </ul>
+
+    </div>
+</div>
+
+{% endif %}

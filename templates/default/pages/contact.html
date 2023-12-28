@@ -1,0 +1,30 @@
+{% extends "default/base.html" %}
+
+{% block title %}Форма контакта{% endblock %}
+
+{% block main_class %}page{% endblock %}
+
+{% block no_index %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+
+{% block hero %}
+    {% include "default/includes/hero.html" %}
+{% endblock %}
+
+{% block post %}
+
+<div class="container">
+    <section class="page">
+        <h1 class="page-header">Форма контакта</h1>
+
+        <form action="{{request.get_full_path}}" method="post" class="contact-form">
+            {% csrf_token %}
+            {{ form }}
+        
+            <input type="submit" value="Отправить">
+        </form>
+        {% if response %}
+        <div class="response_sucess">{{response}}</div>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

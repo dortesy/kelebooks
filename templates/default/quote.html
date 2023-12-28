@@ -1,0 +1,161 @@
+{% extends "default/base.html" %}
+{% load static %}
+{% block title %}Цитата №{{quote.relative_id}} из книги {{ quote.book.title }} - {{ quote.book.author.first_name }} {{ quote.book.author.last_name }} - BookQuotes.ru{% endblock %}
+{% block description %}Цитата №{{quote.relative_id}} из книги {{ quote.book.title }} - {{quote.text|truncatechars:120}}{% endblock %}
+{% block keywords %}{{ quote.book.title }}, {{ quote.book.author.first_name }} {{ quote.book.author.last_name }}, {{quote.book.category.title}}, Цитаты из книг, цитаты, цитаты от автора {{ quote.book.author.first_name }} {{ quote.book.author.last_name }}, цитаты из книги {{quote.book.title}} {% endblock %}
+
+{% block canonical %}{{request.build_absolute_uri }}{% endblock %}
+
+{% block og_url %}{{request.build_absolute_uri }}{% endblock %}
+{% block og_title %}Цитата №{{quote.relative_id}} из книги {{quote.book.title}}{% endblock %}
+{% block og_image %}{{ request.scheme }}://{{ request.get_host }}/{{ quote.book.image }}{% endblock %}
+{% block og_image_alt %}Цитата №{{quote.relative_id}} из книги {{quote.book.title}}{% endblock %}
+
+
+{% block main_class %}post{% endblock %}
+
+{% block post %}
+
+<ul class="breadcrumbs" itemscope="" itemtype="http://schema.org/BreadcrumbList">
+    <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
+        <a itemprop="item" href="/">
+            <span itemprop="name">Главная</span></a>
+        <meta itemprop="position" content="1">
+    </li>
+    <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
+        <a itemprop="item" href="{% url 'author' quote.book.author.slug %}">
+            <span itemprop="name">{{ quote.book.author.first_name }} {{ quote.book.author.last_name }}</span></a>
+        <meta itemprop="position" content="2">
+    </li>
+
+    <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
+        <a itemprop="item" href="{% url 'author' quote.book.slug %}">
+            <span itemprop="name">{{ quote.book.title }}</span></a>
+        <meta itemprop="position" content="3">
+    </li>
+
+    <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="current-element">
+        <span itemprop="name">Цитата №{{ quote.relative_id }}</span>
+        <meta itemprop="position" content="4">
+    </li>
+</ul>
+    
+<section class="single-quote">
+
+
+        <h1 class="single-quote-title">Цитата #{{quote.relative_id}} из книги <span><a href="{% url 'book' quote.book.slug %}">«{{ quote.book.title }}»</a></span></h1>
+
+        <blockquote class="quote" id="quote-{{quote.id}}">
+            <p>{{quote.text}}</p>
+
+
+            <div class="quote-meta">
+                <div class="quote-views">
+                    <span>Просмотров: </span>{{quote.views}}
+                </div>
+
+                <div class="quote-share">
+
+                    <div class="quote-share-link">
+                        <a href="http://vk.com/share.php?url={{ request.scheme }}://{{ request.get_host }}{% url 'quote' quote.id %}&title=Цитата из книги {{quote.book.title}}&description={{quote.text|truncatechars:50}}&image={{quote.book.image}}" target="_blank" rel="nofollow noopener"><img src="{{ request.scheme }}://{{ request.get_host }}{% static 'img/vk.svg' %}"> </a> 
+                    </div>
+
+                    <div class="quote-share-link">
+                        <a href="https://www.facebook.com/sharer.php?u={{ request.scheme }}://{{ request.get_host }}{% url 'quote' quote.id %}" target="_blank" rel="nofollow noopener"><img src="{% static 'img/facebook.svg' %}"></a>
+                    </div>
+                    
+                    <div class="quote-share-link">
+                        <a href="https://twitter.com/intent/tweet?text=Мне нравится это - {{ request.scheme }}://{{ request.get_host }}{% url 'quote' quote.id %}" target="_blank" rel="nofollow noopener"><img src="{% static 'img/twitter.svg' %}"></a>
+                    </div>
+
+                    <div class="quote-share-link">
+                        <a href="https://telegram.me/share/url?url={{ request.scheme }}://{{ request.get_host }}{% url 'quote' quote.id %}&amp;text=Цитата из книги {{quote.book.title}}" target="_blank" rel="nofollow noopener"><img src="{% static 'img/telegram.svg' %}"> </a> 
+                    </div>
+                    
+                    <div class="quote-share-link">
+                        <a href="whatsapp://send?text=Мне нравится это - {{ request.scheme }}://{{ request.get_host }}{% url 'quote' quote.id %}" target="_blank" rel="nofollow noopener"><img src="{% static 'img/whatsapp.svg' %}"> </a> 
+                    </div>
+                        
+                </div>
+            </div>
+
+        </blockquote>
+
+</section>
+
+
+
+
+<div class="single-quote-bottom">
+
+
+    <div class="single-quote-book">
+
+        <h2 class="single-quote-book-title">{{quote.book.title}}</h2>
+
+        <div class="single-quote-book-author">
+            <a href="{% url 'author' quote.book.author.slug %}">{{quote.book.author.first_name}}  {{quote.book.author.last_name}}</a>
+        </div>
+
+
+        <div class="single-quote-book-image">
+            {% if quote.book.image %}
+			
+            <a href="{% url 'book' quote.book.slug %}"><img src="{% static 'img/placeholder.jpg' %}" data-src="{{ quote.book.image }}" alt="{{ quote.book.title }}" class="lazy" itemprop="image"></a>
+    
+            {% else %}
+    
+            <a href="{% url 'book' quote.book.slug %}"><img src="{% static 'img/placeholder.jpg' %}" data-src="{% static 'img/thumbnail-2.jpg' %}" alt="{{ quote.book.title }}" class="lazy" itemprop="image"></a>
+    
+            {% endif %}
+        </div>
+
+        <h3 class="next-quotes-title">Еще цитаты из книги «{{quote.book.title}}»</h3>
+    </div>
+
+    <div class="section-next-quotes">
+        {% for next_quote in next_quotes %}
+
+        <blockquote cite="{% url 'book' next_quote.book.slug %}" class="quote" id="quote-{{next_quote.id}}">
+            <p>{{next_quote.text}}</p>
+
+
+            <div class="quote-meta">
+                <div class="quote-views">
+                    <span>Просмотров: </span>{{next_quote.views}}   
+                </div>
+
+                <div class="quote-share">
+
+                    <div class="quote-share-link">
+                        <a href="http://vk.com/share.php?url={{ request.scheme }}://{{ request.get_host }}{% url 'quote' next_quote.id %}&title=Цитата из книги {{next_quote.book.title}}&description={{next_quote.text|truncatechars:50}}&image={{next_quote.book.image}}" target="_blank" rel="nofollow noopener"><img src="{{ request.scheme }}://{{ request.get_host }}{% static 'img/vk.svg' %}"> </a> 
+                    </div>
+
+                    <div class="quote-share-link">
+                        <a href="https://www.facebook.com/sharer.php?u={{ request.scheme }}://{{ request.get_host }}{% url 'quote' next_quote.id %}" target="_blank" rel="nofollow noopener"><img src="{% static 'img/facebook.svg' %}"></a>
+                    </div>
+                    
+                    <div class="quote-share-link">
+                        <a href="https://twitter.com/intent/tweet?text=Мне нравится это - {{ request.scheme }}://{{ request.get_host }}{% url 'quote' next_quote.id %}" target="_blank" rel="nofollow noopener"><img src="{% static 'img/twitter.svg' %}"></a>
+                    </div>
+
+                    <div class="quote-share-link">
+                        <a href="https://telegram.me/share/url?url={{ request.scheme }}://{{ request.get_host }}{% url 'quote' next_quote.id %}&amp;text=Цитата из книги {{next_quote.book.title}}" target="_blank" rel="nofollow noopener"><img src="{% static 'img/telegram.svg' %}"> </a> 
+                    </div>
+                    
+                    <div class="quote-share-link">
+                        <a href="whatsapp://send?text=Мне нравится это - {{ request.scheme }}://{{ request.get_host }}{% url 'quote' next_quote.id %}" target="_blank" rel="nofollow noopener"><img src="{% static 'img/whatsapp.svg' %}"> </a> 
+                    </div>
+                        
+                </div>
+            </div>
+
+            <a href="{% url 'quote' next_quote.id %}" itemprop="url" class="quote-link"></a>
+        </blockquote>
+
+        {% endfor %}
+    </div>
+    
+</div>
+{% endblock %}
+

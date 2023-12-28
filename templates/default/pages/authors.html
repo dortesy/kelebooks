@@ -1,0 +1,56 @@
+{% extends "default/base.html" %}
+{% load static %}
+{% block title %}Все авторы{% endblock %}
+{% block description %}На этой странице вы найдете всех писателей авторов и их книги{% endblock %}
+{% block keywords %}Писатели, авторы, книги{% endblock %}
+
+{% block canonical %}{{ request.scheme }}://{{request.get_host }}/author/{% endblock %}
+
+{% block og_url %}{{ request.scheme }}://{{request.get_host }}/author/{% endblock %}
+{% block og_title %}Авторы{% endblock %}
+
+
+{% block main_class %}post{% endblock %}
+
+
+{% block post %}
+
+
+
+<section class="latest-book-wrapper">
+
+	<div class="container">
+
+        <ul class="breadcrumbs" itemscope="" itemtype="http://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
+                <a itemprop="item" href="/">
+                    <span itemprop="name">Главная</span></a>
+                <meta itemprop="position" content="1">
+            </li>
+        
+            
+            <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="current-element">
+                <span itemprop="name">Авторы</span>
+                <meta itemprop="position" content="2">
+            </li>
+        
+        </ul>
+
+        <h1 class="archive-title">Все авторы</h1>
+        <h4 class="archive-subtitle">Сортировка по популярности</h4>
+	
+        <section class="popular-authors">
+            <div class="popular-authors-list">
+                {% for author in authors %}
+                    <a href="{% url 'author' author.slug %}">{{ author.first_name }} {{ author.last_name }}</a>
+                {% endfor %}
+            </div>
+        </section>
+
+	</div>
+
+</section>
+
+
+
+{% endblock %}

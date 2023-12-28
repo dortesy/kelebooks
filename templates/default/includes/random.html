@@ -1,0 +1,42 @@
+{% load static %}
+<section class="section-best-quotes">
+	<h2 class="section-title">Популярные цитаты</h2>
+
+
+	<div class="swiper best-quotes">
+		<div class="swiper-wrapper">
+
+			{% for quote in content.quotes %}
+
+				<div class="swiper-slide">
+					<blockquote cite="{{ request.scheme }}://{{ request.get_host }}{% url 'quote' quote.id %}" class="best-quote">
+						<p>{{quote.text|truncatechars:200}}</p>
+
+
+						<div class="book-quote-meta">
+							<a href="{% url 'book' quote.book.slug %}" class="best-quote-book-link">{{quote.book.title}}</a>
+
+							<div itemprop="author" itemscope itemtype="http://schema.org/Person">
+								<span itemprop="name">
+								<a itemprop="url" href="{% url 'author' quote.book.author.slug %}" class="best-quote-author-link">{{quote.book.author.first_name}} {{quote.book.author.last_name}}</a></span>
+							</div>
+						</div>
+
+						<a href="{% url 'quote' quote.id %}" itemprop="url" class="best-quote-link"></a>
+					</blockquote>
+				</div>
+
+			{% endfor%}
+
+			
+		</div>
+
+		<div class="swiper-button-next"></div>
+		<div class="swiper-button-prev"></div>
+
+	</div>
+
+
+
+
+</section>

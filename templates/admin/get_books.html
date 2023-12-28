@@ -1,0 +1,37 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+
+<form {% if form_url %} action="{{ form_url }}"{% endif %}  method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{form.as_p}}
+
+    <input type="submit" value="Добавить книги">
+
+    {% if duplicates %}
+    <h3>Дупликаты</h3>
+
+    <ul>
+        {% for duplicate in duplicates %}
+        <li>{{duplicate}}</li>
+
+        {% endfor %}
+    </ul>
+
+    {% endif %}
+
+
+    {% if added_books %}
+    <h3>Добавленные книги</h3>
+    <ul>
+        {% for book in added_books %}
+        <li>{{book}}</li>
+        {% endfor %}
+    </ul>
+
+    {% endif %}
+
+</form>
+
+{% endblock %}
+

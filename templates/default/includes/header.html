@@ -1,0 +1,68 @@
+{% load static %}
+
+
+<header class="top-header">
+
+	<div class="container">
+		<div class="top-header-inner">
+
+			<div class="logo">
+				<a href="/"><img src="{% static 'img/logo.svg' %}" alt="Читать книги онлайн"></a>
+			</div>
+
+
+				<form action="{% url 'search_results' %}" class="main-search">
+					{% csrf_token %}
+					<input name="q" type="text" placeholder="Введите название или автора книги (от 3-х букв)" class="main-search-input" autocomplete="off">
+
+					<svg class="search-loading" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0" viewBox="0 0 128 128" xml:space="preserve"><rect x="0" y="0" width="100%" height="100%" fill="transparent" /><g><linearGradient id="linear-gradient"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#101926"/></linearGradient><path d="M63.85 0A63.85 63.85 0 1 1 0 63.85 63.85 63.85 0 0 1 63.85 0zm.65 19.5a44 44 0 1 1-44 44 44 44 0 0 1 44-44z" fill="url(#linear-gradient)" fill-rule="evenodd"/><animateTransform attributeName="transform" type="rotate" from="0 64 64" to="360 64 64" dur="1080ms" repeatCount="indefinite"></animateTransform></g></svg>
+
+
+					<div class="main-search-results">
+						
+					</div>
+					<button>
+						<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+						viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve">
+						<path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23
+							s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92
+							c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17
+							s-17-7.626-17-17S14.61,6,23.984,6z"/>
+						
+						</svg>
+					</button>
+
+				</form>
+
+				<nav class="menu-nav" itemscope itemtype="http://schema.org/SiteNavigationElement">
+
+					<ul class="menu-ul">
+						<li class="menu-li"><a href="{% url 'categories' %}" itemprop="url" ><span itemprop="name">Жанры</span></a></li>
+						<li class="menu-li"><a href="{% url 'authors' %}" itemprop="url" ><span itemprop="name">Авторы</span></a></li>
+						<li class="menu-li"><a href="{% url 'years' %}" itemprop="url" ><span itemprop="name">По годам</span></a></li>
+					</ul>
+
+					<div class="account">
+						{% if not user.is_authenticated %}
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#355897" fill-rule="evenodd" d="M15 12.5H3V11.5H15V12.5Z" clip-rule="evenodd"/><path fill="#355897" fill-rule="evenodd" d="M11.8536 8.14645L15.3536 11.6465C15.5489 11.8417 15.5489 12.1583 15.3536 12.3536L11.8536 15.8536L11.1465 15.1465L14.2929 12L11.1465 8.85356L11.8536 8.14645Z" clip-rule="evenodd"/><path fill="#355897" fill-rule="evenodd" d="M8.5 4C8.5 3.72386 8.72386 3.5 9 3.5H21C21.2761 3.5 21.5 3.72386 21.5 4V20C21.5 20.2761 21.2761 20.5 21 20.5H9C8.72386 20.5 8.5 20.2761 8.5 20V17H9.5V19.5H20.5V4.5H9.5V7H8.5V4Z" clip-rule="evenodd"/></svg>
+						{% else %}
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" ><path d="M12.5 11a4 4 0 1 1 4-4A4 4 0 0 1 12.5 11zm0-7a3 3 0 1 0 3 3A3 3 0 0 0 12.5 4zM22 22H21v-.5a8.5 8.5 0 0 0-17 0V22H3v-.5a9.5 9.5 0 0 1 19 0z"/></svg>
+						{% endif %}
+					</div>	
+	
+				</nav>
+
+				
+				<div class="theme-switcher">
+					<label class="switch">
+						<input type="checkbox" class="theme-checkbox">
+						<span class="switcher round"></span>
+					 </label>
+
+					 <span class="theme-switcher-text">Темная тема</span>
+				</div>
+		</div>
+	</div>
+
+</header>
+

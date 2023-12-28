@@ -1,0 +1,56 @@
+{% extends "default/base.html" %}
+{% load static %}
+{% block title %}Все жанры{% endblock %}
+{% block description %}На этой странице вы найдете все жанры и книги по этим жанрам{% endblock %}
+{% block keywords %}Жанры, категории, книги{% endblock %}
+
+{% block canonical %}{{ request.scheme }}://{{request.get_host }}/category/{% endblock %}
+
+{% block og_url %}{{ request.scheme }}://{{request.get_host }}/category/{% endblock %}
+{% block og_title %}Жанры{% endblock %}
+
+
+{% block main_class %}post{% endblock %}
+
+
+{% block post %}
+
+
+
+<section class="latest-book-wrapper">
+
+	<div class="container">
+
+        <ul class="breadcrumbs" itemscope="" itemtype="http://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
+                <a itemprop="item" href="/">
+                    <span itemprop="name">Главная</span></a>
+                <meta itemprop="position" content="1">
+            </li>
+        
+            
+            <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="current-element">
+                <span itemprop="name">Жанры</span>
+                <meta itemprop="position" content="2">
+            </li>
+        
+        </ul>
+
+        <h1 class="archive-title">Все жанры</h1>
+        <h4 class="archive-subtitle">Сортировка по популярности</h4>
+	
+        <section class="popular-authors">
+            <div class="popular-authors-list">
+                {% for category in categories %}
+                    <a href="{% url 'category' category.slug %}">{{ category.title }}</a>
+                {% endfor %}
+            </div>
+        </section>
+
+	</div>
+
+</section>
+
+
+
+{% endblock %}

@@ -1,0 +1,13 @@
+{% load static %}
+<div class="container">
+    <section class="popular-authors">
+        <h2 class="section-title"><span>Книги</span> по годам</h2>
+
+        <div class="popular-authors-list">
+            {% for year in years|slice:":20" %}
+                <a href="{% url 'year' year.slug %}">{{ year.date }}</a>
+            {% endfor %}
+        </div>
+    </section>
+
+</div>

@@ -1,0 +1,6 @@
+Sitemap: https://thisbook.com/sitemap-books.xml
+Sitemap: https://thisbook.com/sitemap-authors.xml
+User-agent: *
+Disallow: /contact/
+Disallow: /privacy-policy/
+Disallow: /account/

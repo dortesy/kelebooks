@@ -1,0 +1,55 @@
+{% extends "default/base.html" %}
+{% load static %}
+{% block title %}Все книги по годам{% endblock %}
+{% block description %}На этой странице вы найдете все книги по годам{% endblock %}
+{% block keywords %}Книги по годам{% endblock %}
+
+{% block canonical %}{{ request.scheme }}://{{request.get_host }}/year/{% endblock %}
+
+{% block og_url %}{{ request.scheme }}://{{request.get_host }}/year/{% endblock %}
+{% block og_title %}Жанры{% endblock %}
+
+
+{% block main_class %}post{% endblock %}
+
+
+{% block post %}
+
+
+
+<section class="latest-book-wrapper">
+
+	<div class="container">
+
+        <ul class="breadcrumbs" itemscope="" itemtype="http://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
+                <a itemprop="item" href="/">
+                    <span itemprop="name">Главная</span></a>
+                <meta itemprop="position" content="1">
+            </li>
+        
+            
+            <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="current-element">
+                <span itemprop="name">Года</span>
+                <meta itemprop="position" content="2">
+            </li>
+        
+        </ul>
+
+        <h1 class="archive-title">Все книги по годам</h1>
+	
+        <section class="popular-authors">
+            <div class="popular-authors-list">
+                {% for year in years %}
+                    <a href="{% url 'year' year.slug %}">{{ year.date }}</a>
+                {% endfor %}
+            </div>
+        </section>
+
+	</div>
+
+</section>
+
+
+
+{% endblock %}

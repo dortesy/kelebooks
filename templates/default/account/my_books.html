@@ -1,0 +1,38 @@
+{% extends "default/base.html" %}
+
+{% block title %}Книги которые вы читаете прямо сейчас{% endblock %}
+
+{% block main_class %}page{% endblock %}
+
+{% block no_index %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+
+{% block hero %}
+    {% include "default/includes/hero.html" %}
+{% endblock %}
+
+{% block post %}
+
+<main>
+    <div class="container">
+        <div class="profile">
+            <h1>Ваши книги:</h1>
+            <div class="profile-books">
+            {% for book, page in my_books %}
+                <div class="profile-book">
+                    <div class="profile-book-image">
+                        <img src="{{ book.image }}" alt="{{book.title}}">
+                    </div>
+                    
+                    <div class="profile-book-page">
+                        Страница #{{page}}
+                    </div>
+
+                    <a href="{% url 'book' book.slug %}" class="profile-book-link">Продолжить чтение</a>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock %}

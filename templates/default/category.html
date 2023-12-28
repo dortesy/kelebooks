@@ -1,0 +1,195 @@
+{% extends "default/base.html" %}
+{% load static %}
+{% block title %}Все книги по жанру {{category.title}}{% endblock %}
+{% block description %}На этой странице вы найдете все книги по жанру {{category.title}} с возможность читать онлайн бесплатно{% endblock %}
+{% block keywords %}{{category.title}} книги, {{category.title}}, книги по жанру {{category.title}} {% endblock %}
+
+{% block canonical %}{{ request.scheme }}://{{request.get_host }}/category/{{ category.slug }}/{% endblock %}
+
+{% block og_url %}{{ request.scheme }}://{{request.get_host }}/category/{{ category.slug }}/{% endblock %}
+{% block og_title %}{{category.title}} {% endblock %}
+{% block og_image %}{{ request.scheme }}://{{ request.get_host }}/{{ books.0.image }}{% endblock %}
+{% block og_image_alt %}{{category.title}}{% endblock %}
+{% block no_index %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+
+{% block main_class %}post{% endblock %}
+
+
+
+
+{% block post %}
+
+
+
+<section class="latest-book-wrapper">
+
+	<div class="container">
+
+        <ul class="breadcrumbs" itemscope="" itemtype="http://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
+                <a itemprop="item" href="/">
+                    <span itemprop="name">Главная</span></a>
+                <meta itemprop="position" content="1">
+            </li>
+        
+            <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
+                <a itemprop="item" href="{% url 'categories' %}">
+                    <span itemprop="name">Жанры</span></a>
+                <meta itemprop="position" content="2">
+            </li>
+
+            <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="current-element">
+                <span itemprop="name">{{category.title}}</span>
+                <meta itemprop="position" content="3">
+            </li>
+        
+        </ul>
+
+        <h1 class="archive title">Книги по жанру - {{category.title}}</h1>
+
+		<div class="latest-books">
+			{% for book in books %}
+			
+			<div class="latest-book" itemscope itemtype="https://schema.org/Book">
+
+				<div class="latest-book-bg"></div>
+				<a href="{% url 'book' book.slug %}" class="latest-book-link" itemprop="contentUrl"></a>
+				
+					<div class="latest-book-image">
+						{% if book.image %}
+					
+						<img src="{% static 'img/placeholder.jpg' %}" itemprop="image" data-src="{{ book.image }}" alt="{{ book.title }}" class="lazy" itemprop="image">
+			
+						{% else %}
+			
+						<img src="{% static 'img/placeholder.jpg' %}" itemprop="image" data-src="{% static 'img/thumbnail-2.jpg' %}" alt="{{ book.title }}" class="lazy" itemprop="image">
+			
+						{% endif %}
+					</div>
+			
+
+				<div class="latest-book-description">
+					<a class="latest-book-author" href="{% url 'author' book.author.slug %}" itemprop="author">{{ book.author.first_name }} {{ book.author.last_name }}</a>
+					<h3 class="latest-book-book" itemprop="name">{{ book.title }}</h3>
+					<div class="latest-book-meta">
+						{% if book.ratings.get.average %}
+						<div class="latest-book-rating"><img src="{% static '/img/star.svg' %}" alt="Rating"> <span>{{book.ratings.get.average|floatformat:"-2" }}</span></div>
+						{% endif %}
+						<div class="latest-book-views"><img src="{% static '/img/eye.svg' %}" alt="Rating"> <span>{{book.views}}</span></div>
+						<div class="latest-book-year" itemprop="datePublished"><img src="{% static '/img/year.svg' %}" alt="Rating"> <span>
+							
+							{% for year in book.year.all %}
+								{{year.date}} {% if not forloop.last %} - {% endif %}
+							{% endfor %}
+						
+						</span></div>
+					</div>
+					<div class="latest-book-description-bg"></div>
+				</div>
+			
+	
+			</div>
+			
+			{% endfor%}
+		</div>
+
+		<!--Pagination-->
+		<nav aria-label="pagination-nav" itemscope itemtype="http://schema.org/SiteNavigationElement/Pagination">
+			<ul class="pagination">
+			{% if books.has_previous %}
+			<li class="page-item">
+				<a class="page-link" href="/category/{{category.slug}}/?page={{ books.previous_page_number }}" rel="prev">Назад</a>
+			</li>
+			{% else %}
+			<li class="page-item disabled">
+				<a class="page-link" href="#" tabindex="-1" aria-disabled="True">Назад</a>
+			</li>
+			{% endif %}
+
+			{% if books.number > 5 %}
+			<li class="page-item">
+				<a href="/category/{{category.slug}}/?page=1" itemprop="relatedLink/pagination">1</a>
+			</li>	
+			{% endif %}
+
+			{% if books.number|add:'-4' > 1 %}
+				<li class="page-item"><a class="page-link" href="/category/{{category.slug}}/?page={{ books.number|add:'-5' }}" itemprop="relatedLink/pagination">&hellip;</a></li>
+			{% endif %}
+
+			{% for i in books.paginator.page_range %}
+				{% if books.number == i %}
+					<li class="page-item active" aria-current="page">
+					<span class="page-link">
+					{{ i }}
+				</span>
+				</li>
+				{% elif i > books.number|add:'-5' and i < books.number|add:'5' %}
+					<li class="page-item"><a class="page-link" href="/category/{{category.slug}}/?page={{ i }}" itemprop="relatedLink/pagination">{{ i }}</a></li>
+				{% endif %}
+			{% endfor %}
+
+			{% if books.paginator.num_pages > books.number|add:'4' %}
+			<li class="page-item"><a class="page-link" href="/category/{{category.slug}}/?page={{ books.number|add:'5' }}" itemprop="relatedLink/pagination">&hellip;</a></li>
+			{% endif %}
+
+						
+			{% if books.number < books.paginator.num_pages|add:'-2' %}
+			<li class="page-item">
+				<a href="/category/{{category.slug}}/?page={{ books.paginator.num_pages }}" itemprop="relatedLink/pagination">{{ books.paginator.num_pages }}</a>
+			</li>	
+			{% endif %}
+
+			{% if books.has_next %}
+				<li class="page-item">
+				<a class="page-link" href="/category/{{category.slug}}/?page={{ books.next_page_number }}" rel="next">Далее</a>
+			</li>
+
+		
+			{% else %}
+				<li class="page-item disabled">
+				<a class="page-link" href="#" tabindex="-1" aria-disabled="True">Далее</a>
+			</li>
+			{% endif %}
+		</ul>
+		</nav>
+		<!--end of Pagination-->
+
+	</div>
+
+</section>
+
+
+<script src="{% static '/js/vibrant.min.js' %}"></script>
+<script>
+ 	function randomIntFromInterval(min, max) { // min and max included 
+        return Math.floor(Math.random() * (max - min + 1) + min)
+        }
+
+	let latest_books = document.querySelectorAll('.latest-book')
+	
+
+	latest_books.forEach(e => {
+		var gradient_colors = ''
+		Vibrant.from(e.querySelector('img').dataset.src).getPalette().then((palette) => {
+
+	
+		for(let color in palette) {
+			let r_number = randomIntFromInterval(0, 360)
+            let r_number2 = randomIntFromInterval(60, 110)
+
+
+			gradient_colors += "linear-gradient("+r_number+"deg, "+palette[color].getHex()+", rgba(0,0,0, 5) "+r_number2+".71%), "
+
+		}
+
+		let gradient_style = gradient_colors.substring(0, gradient_colors.length - 2);
+		e.querySelector('.latest-book-bg').style.backgroundImage  = gradient_style;
+		});
+
+	})
+		
+
+</script>
+
+
+{% endblock %}

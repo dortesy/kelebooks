@@ -1,0 +1,13 @@
+{% load static %}
+<div class="container">
+    <section class="popular-authors">
+        <h2 class="section-title"><span>25</span> Популярных авторов</h2>
+
+        <div class="popular-authors-list">
+            {% for author in authors|slice:":25" %}
+                <a href="{% url 'author' author.slug %}">{{ author.first_name }} {{ author.last_name }}</a>
+            {% endfor %}
+        </div>
+    </section>
+
+</div>

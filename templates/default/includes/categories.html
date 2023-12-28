@@ -1,0 +1,25 @@
+{% load static %}
+		<div class="content_block">
+		<div class="content_block__meta">
+			<h2 class="content_block__title">Categories</h2>
+			<h4 class="content_block__subtitle">Find wallpapers for your purposes</h4>
+		</div>
+
+		<div class="swiper-container categories">
+			<div class="swiper-wrapper">
+
+				{% for category in categories %}
+				<div class="swiper-slide">
+					<a href="{% url 'category' category.slug %}">
+						<div class="categories_info">
+							<h3 class="categories__title">{{category.title}}</h3>
+							<div class="categories__subtitle">{{category.post_set.count}} wallpaper collection</div>
+						</div>
+					</a>
+				</div>
+				{% endfor %}
+
+
+			</div>
+		</div>
+	</div>

@@ -1,0 +1,52 @@
+{% load static %}
+
+   
+<link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"  />
+<div class="section-popular-wrapper">
+	<div class="container">
+		<section class="section-popular">
+
+			<h2 class="section-title"><span>20</span> Популярных книг</h2>
+		
+			<div class="swiper-container popular">
+		
+				<div class="swiper-wrapper">
+					{% for book in popular %}
+					<div class="swiper-slide">
+		
+						<a href="{% url 'book' book.slug %}" class="slider-link" itemprop="contentUrl"></a>
+						<div class="slider-bg">
+						</div>
+		
+						{% if book.image %}
+					
+						<img src="{% static 'img/placeholder.jpg' %}" data-src="{{ book.image }}" alt="{{ book.title }} - {{ book.author.first_name }} {{ book.author.last_name }}" class="lazy" itemprop="image">
+			
+						{% else %}
+			
+						<img src="{% static 'img/placeholder.jpg' %}" data-src="{% static 'img/thumbnail-2.jpg' %}" alt="{{ book.title }} - {{ book.author.first_name }} {{ book.author.last_name }}" class="lazy" itemprop="image">
+			
+						{% endif %}
+						
+						
+		
+						<div class="slider-description">
+							<div class="slider-author">{{ book.author.first_name }} {{ book.author.last_name }}</div>
+							<div class="slider-book">{{ book.title }}</div>
+						</div>
+		
+					</div>
+					
+					{% endfor%}
+		
+				</div>
+		
+			</div>
+
+			<!-- <div class="swiper-button-next"></div>
+			<div class="swiper-button-prev"></div> -->
+		
+		</section>
+	</div>
+</div>
+

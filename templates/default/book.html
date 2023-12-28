@@ -1,0 +1,342 @@
+{% extends "default/base.html" %}
+{% load static %}
+{% load ratings %}
+{% load static %}
+{% load book_extras %}
+
+
+{% block title %}{{ book.title }} - {{ book.author.first_name }} {{ book.author.last_name }} читать онлайн бесплатно на телефоне{% if text.number > 1 %} - Страница {{text.number}}{% endif %}{% endblock %}
+{% block description %}{{ book.title }} - {{ book.author.first_name }} {{ book.author.last_name }} читать онлайн бесплатно на телефоне и компьютере. {{book.annotation|truncatewords:15}}{% endblock %}
+{% block keywords %}{{ book.title }}, {{ book.author.first_name }} {{ book.author.last_name }} - {{book.title}}, Книги от автора {{ book.author.first_name }} {{ book.author.last_name }}, Читать книгу {{book.title}} онлайн, {% for cat in book.categories.all %}{{cat.title}},{% endfor %} {% for keyword in book.keywords.all %}{{keyword.title}},{% endfor %}{% endblock %}
+
+{% block canonical %}{{ request.scheme }}://{{request.get_host }}/book/{{ book.slug }}/{% endblock %}
+
+{% block og_url %}{{ request.scheme }}://{{request.get_host }}/book/{{ book.slug }}/{% endblock %}
+{% block og_title %}{{book.title}}{% endblock %}
+{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{{ book.image }}{% endblock %}
+{% block og_image_alt %}{{book.title}}{% endblock %}
+
+{% block no_index %}{% if text.number > 1 %}<meta name="robots" content="noindex, nofollow">{% endif %}{% endblock %}
+
+
+{% block main_class %}post{% endblock %}
+
+{% block post %}
+
+         
+
+
+
+<div class="single-book">
+    <div class="container">
+
+    <ul class="breadcrumbs" itemscope="" itemtype="http://schema.org/BreadcrumbList">
+        <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
+            <a itemprop="item" href="/">
+                <span itemprop="name">Главная</span></a>
+            <meta itemprop="position" content="1">
+        </li>
+
+        <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
+            <a itemprop="item" href="{% url 'author' book.author.slug %}">
+                <span itemprop="name">{{ book.author.first_name }} {{ book.author.last_name }}</span></a>
+            <meta itemprop="position" content="2">
+        </li>
+    
+        <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="current-element">
+            <span itemprop="name">{{ book.title }}</span>
+            <meta itemprop="position" content="3">
+        </li>
+    
+    </ul>
+
+
+        <div class="single-book-inner" itemscope itemtype="https://schema.org/Book">
+
+
+            <div class="single-book-row">
+
+                <div class="single-book-media-content">
+                    <div class="single-book-rating">
+                        {% ratings book %}
+                    </div>
+                   
+                    <div class="single-book-image">
+                        {% if book.image %}
+                            
+                        <img src="{% static 'img/placeholder.jpg' %}" data-src="{{ book.image }}" alt="{{ book.title }}" class="lazy" itemprop="image" itemprop="image">
+                
+                        {% else %}
+                
+                        <img src="{% static 'img/placeholder.jpg' %}" data-src="{% static 'img/thumbnail-2.jpg' %}" alt="{{ book.title }}" class="lazy" itemprop="image" itemprop="image">
+                
+                        {% endif %}
+                    </div>
+        
+                    <h1 class="single-book-title" itemprop="name">{{book.title}}</h1>
+        
+                    <h2 class="single-book-author" itemprop="author">
+                        <a href="{% url 'author' book.author.slug %}">{{book.author.first_name}}  {{book.author.last_name}}</a>
+                    </h2>
+
+                </div>
+
+                <div class="single-book-text-content">
+                               
+
+           
+
+            <div class="single-book-tabs">
+                <div class="single-book-tab active" data-tab="1">
+                    Категории
+                </div>
+
+                <div class="single-book-tab" data-tab="2">
+                    Ключевые слова
+                </div>
+            </div>
+
+            <div class="single-book-tabs-content">
+
+                <div class="single-book-tab-content active" data-tab-content="1">
+                    {% for cat in book.categories.all %}
+                    <a href="{% url 'category' cat.slug %}" itemprop="about">{{cat.title}}</a>
+                    {% endfor %}
+                </div>
+            
+                <div class="single-book-tab-content" data-tab-content="2">
+                    {% for keyword in book.keywords.all %}
+                    <a href="{% url 'keyword' keyword.slug %}" itemprop="about">{{keyword.title}}</a>
+                    {% endfor %}
+                </div>
+
+            </div>
+
+
+
+
+
+            <div class="single-book-info">
+                
+        
+                        <div class="single-book-meta">
+                            <div class="single-book-meta-title">
+                                Просмотров:
+                            </div>
+                
+                            <div class="single-book-meta-value">
+                                {{ book.views }}
+                            </div>
+                        
+                        </div>
+                
+                
+                        <div class="single-book-meta">
+                            <div class="single-book-meta-title">
+                                Год:
+                            </div>
+                
+                            <div class="single-book-meta-value">
+                                {% for year in book.year.all %}
+                                    <a href="{% url 'year' year.slug %}">{{year.date}}</a> {% if not forloop.last %} - {% endif %}
+                                {% endfor %}
+                            </div>
+                        
+                        </div>
+
+                        {% if book.lang %}
+                
+                        <div class="single-book-meta">
+                            <div class="single-book-meta-title">
+                                Язык:
+                            </div>
+                
+                            <div class="single-book-meta-value">
+                                {% if book.lang == 'en' %}
+                                Английский
+                                {% elif book.lang == 'ru' %}
+                                Русский
+                                {% elif book.lang == 'de' %}
+                                Немецкий
+                                {% elif book.lang == 'es' %}
+                                Испанский
+                                {% elif book.lang == 'it' %}
+                                Итальянский
+                                {% elif book.lang == 'jp' %}
+                                Японский
+                                {% elif book.lang == 'ko' %}
+                                Корейский
+                                {% elif book.lang == 'zh' %}
+                                Китайский
+                                {% elif book.lang == 'ua' %}
+                                Украинский
+                                {% elif book.lang == 'el' %}
+                                Греческий
+                                {% elif book.lang == 'la' %}
+                                Латинский
+                                {% endif %} 
+                                
+                            </div>
+                        </div>
+                        
+                        {% endif %}
+
+                        
+                        {% if book.isbn %}
+                
+                        <div class="single-book-meta">
+                            <div class="single-book-meta-title">
+                                ISBN:
+                            </div>
+                
+                            <div class="single-book-meta-value">
+                                {{  book.isbn }}
+                            </div>
+                        </div>
+                        
+                        {% endif %}
+
+                        {% if book.publisher %}
+                
+                        <div class="single-book-meta">
+                            <div class="single-book-meta-title">
+                                Издательство:
+                            </div>
+                
+                            <div class="single-book-meta-value">
+                                {{ book.publisher }}
+                            </div>
+                        </div>
+                        
+                        {% endif %}
+
+
+                    </div>
+
+                    
+                    <div class="book-share">
+
+                        <div class="book-share-link">
+                            <a href="http://vk.com/share.php?url={{ request.scheme }}://{{ request.get_host }}{% url 'book' book.id %}&title={{book.title}} Читать онлайн бесплатно&description={{book.text|truncatechars:50}}&image={{ request.scheme }}://{{ request.get_host }}{{book.image}}" target="_blank" rel="nofollow noopener"><img src="{{ request.scheme }}://{{ request.get_host }}{% static 'img/vk.svg' %}" alt="Поделиться во Вконтакте"> </a> 
+                        </div>
+
+                        <div class="book-share-link">
+                            <a href="https://www.facebook.com/sharer.php?u={{ request.scheme }}://{{ request.get_host }}{% url 'book' book.id %}" target="_blank" rel="nofollow noopener"><img src="{% static 'img/facebook.svg' %}" alt="Поделиться во Facebook"></a>
+                        </div>
+                        
+                        <div class="book-share-link">
+                            <a href="https://twitter.com/intent/tweet?text=Отличная книга, рекомендую к прочтению - {{ request.scheme }}://{{ request.get_host }}{% url 'book' book.id %}" target="_blank" rel="nofollow noopener"><img src="{% static 'img/twitter.svg' %}" alt="Поделиться в Твиттере"></a>
+                        </div>
+
+                        <div class="book-share-link">
+                            <a href="https://telegram.me/share/url?url={{ request.scheme }}://{{ request.get_host }}{% url 'book' book.id %}&amp;text=Читать онлайн {{book.title}}" target="_blank" rel="nofollow noopener"><img src="{% static 'img/telegram.svg' %}" alt="Поделиться в Телеграм"> </a> 
+                        </div>
+                        
+                        <div class="book-share-link">
+                            <a href="whatsapp://send?text=Мне нравится это - {{ request.scheme }}://{{ request.get_host }}{% url 'book' book.id %}" target="_blank" rel="nofollow noopener"><img src="{% static 'img/whatsapp.svg' %}" alt="Поделиться во WhatsApp"> </a> 
+                        </div>
+                            
+                    </div>
+
+
+                </div>
+
+
+
+            </div>
+
+
+
+            <div class="single-book-annotation">
+                <h3>Аннотация к книге <span>{{book.title}} - {{book.author.first_name}}  {{book.author.last_name}}</span></h3>
+                <div class="single-book-annotation-subtitle">
+                        {% firstof book.book_name book.title %} - Описание и краткое содержание к книге
+                </div>
+
+                <div class="single-book-annotation-text">
+                    {{ book.annotation }}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+    
+<main class="single-content">
+    <div class="container">
+        <div class="single-content-inner">
+            <h2 class="single-content-title"  id="read-book">
+                {% if text.number == 1 %}{{book.title}} читать онлайн бесплатно{% endif %} {% if text.number > 1 %}{{book.title}} - Страница {{text.number}}{% endif %}
+            </h2>
+
+            <div class="single-content-full-book">
+                {% for t in text %}
+                    {{t|safe}}
+                {% endfor %}
+            </div>
+        
+           
+        <!--Pagination-->
+		<nav aria-label="pagination-nav" itemscope itemtype="http://schema.org/SiteNavigationElement/Pagination">
+			<ul class="pagination">
+			{% if text.has_previous %}
+			<li class="page-item">
+				<a class="page-link" href="/book/{{book.slug}}/?page={{ text.previous_page_number }}#read-book" rel="prev">Назад</a>
+			</li>
+			{% else %}
+			<li class="page-item disabled">
+				<a class="page-link" href="#" tabindex="-1" aria-disabled="True">Назад</a>
+			</li>
+			{% endif %}
+
+			{% if text.number > 5 %}
+			<li class="page-item">
+				<a href="/book/{{book.slug}}/?page=1" itemprop="relatedLink/pagination">1</a>
+			</li>	
+			{% endif %}
+
+			{% if text.number|add:'-4' > 1 %}
+				<li class="page-item"><a class="page-link" href="/book/{{book.slug}}/?page={{ text.number|add:'-5' }}#read-book" itemprop="relatedLink/pagination">&hellip;</a></li>
+			{% endif %}
+
+			{% for i in text.paginator.page_range %}
+				{% if text.number == i %}
+					<li class="page-item active" aria-current="page">
+					<span class="page-link">
+					{{ i }}
+				</span>
+				</li>
+				{% elif i > text.number|add:'-5' and i < text.number|add:'5' %}
+					<li class="page-item"><a class="page-link" href="/book/{{book.slug}}/?page={{ i }}#read-book" itemprop="relatedLink/pagination">{{ i }}</a></li>
+				{% endif %}
+			{% endfor %}
+
+			{% if text.paginator.num_pages > text.number|add:'4' %}
+			<li class="page-item"><a class="page-link" href="/book/{{book.slug}}/?page={{ text.number|add:'5' }}#read-book" itemprop="relatedLink/pagination">&hellip;</a></li>
+			{% endif %}
+
+			{% if text.has_next %}
+				<li class="page-item">
+				<a class="page-link" href="/book/{{book.slug}}/?page={{ text.next_page_number }}#read-book" rel="next">Далее</a>
+			</li>
+
+		
+			{% else %}
+			<li class="page-item disabled">
+				<a class="page-link" href="#" tabindex="-1" aria-disabled="True">Далее</a>
+			</li>
+			{% endif %}
+		</ul>
+		</nav>
+		<!--end of Pagination-->
+
+
+       
+        </div>
+    </div>
+
+
+</main>
+
+{% endblock %}
+

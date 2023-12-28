@@ -1,0 +1,17 @@
+{% load static %}
+		<div class="content_block">
+		<div class="content_block__meta">
+			<h2 class="content_block__title">Colors</h2>
+			<h4 class="content_block__subtitle">Choose wallpapers by color palette</h4>
+		</div>
+
+		<div class="swiper-container colors">
+			<div class="swiper-wrapper">
+			{% for color in content.palette %}
+				<div class="swiper-slide" >
+					<a href="{% url 'color' color|slugify %}" style="background-color:{{color}}"></a>
+				</div>
+            {% endfor %}
+			</div>
+		</div>
+	</div>
