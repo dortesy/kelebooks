@@ -85,9 +85,9 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'files'),
-)
+# STATICFILES_DIRS = (
+#     os.path.join(BASE_DIR, 'files'),
+# )
 
 
 
@@ -117,6 +117,7 @@ HTML_MINIFY = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, "files")
 STATIC_URL = '/files/'
 
 # Default primary key field type
